@@ -39,3 +39,28 @@ filesystem MCP tools (`list_directory` / `read_text_file`).
 
 Screenshots: `docs/screenshots/filesystem-mcp-connected.png` (server connected),
 `docs/screenshots/filesystem-list-summarize.png` (list + read result).
+
+---
+
+## Task 3: Jira MCP
+
+Connected Claude Code to Jira via the **official Atlassian Rovo MCP server**, a
+remote server reached over **streamable HTTP** at `https://mcp.atlassian.com/v1/mcp`.
+Authentication is **OAuth 2.1**, handled interactively by Claude Code (`/mcp` →
+Authenticate → browser login) — no tokens are stored in `.mcp.json` or `.env`.
+
+> Note: the first OAuth grant returned Confluence-only scopes, so Jira calls failed.
+> Re-authorizing (`/mcp` → clear auth → reconnect) and accepting the **Jira** scopes
+> on the Atlassian consent screen fixed it.
+
+**Request performed (per the assignment):**
+
+> "Give me the tickets of the last 5 bugs on a project."
+
+Claude ran a JQL search via the Jira MCP server
+(`issuetype = Bug ORDER BY created DESC`, limited to 5) and returned the 5 most
+recent bug tickets. To avoid sharing sensitive information, only the ticket
+**keys/numbers** are shown (see screenshot) — no summaries or descriptions.
+
+Screenshots: `docs/screenshots/jira-mcp.png` (server connected),
+`docs/screenshots/jira-tickets-list.png` (last 5 bug tickets result).
