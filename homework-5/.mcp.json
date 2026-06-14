@@ -6,6 +6,14 @@
       "headers": {
         "Authorization": "Bearer ${GITHUB_PAT}"
       }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/alyonagolovko/Alyona/study/ai-assisted-dev-homework/homework-5"
+      ]
     }
   }
 }
