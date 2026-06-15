@@ -64,3 +64,44 @@ recent bug tickets. To avoid sharing sensitive information, only the ticket
 
 Screenshots: `docs/screenshots/jira-mcp.png` (server connected),
 `docs/screenshots/jira-tickets-list.png` (last 5 bug tickets result).
+
+---
+
+## Task 4: Custom MCP Server (FastMCP)
+
+Built a custom MCP server in Python using **FastMCP** that reads a local
+`lorem-ipsum.md` file and returns the first N words. The server exposes both a
+**Resource** (a URI Claude reads passively) and a **Tool** (an action Claude calls
+with arguments).
+
+### Resource vs Tool
+
+- **Resource** — a URI that Claude _reads from_, like fetching a file or an API
+  endpoint. No arguments are passed; the data lives at the URI. Here: `lorem://words`
+  returns 30 words; `lorem://words/{word_count}` returns N words.
+- **Tool** — an action Claude _calls_ with parameters, like invoking a function.
+  The server executes logic and returns the result. Here: `read(word_count=30)` reads
+  the first N words from `lorem-ipsum.md`.
+
+### Server details
+
+| Component   | Detail                                        |
+| ----------- | --------------------------------------------- |
+| File        | `custom-mcp-server/server.py`                 |
+| Framework   | FastMCP 3.4.2                                 |
+| Source text | `custom-mcp-server/lorem-ipsum.md`            |
+| Tool        | `read(word_count: int = 30)`                  |
+| Resources   | `lorem://words`, `lorem://words/{word_count}` |
+| Transport   | stdio                                         |
+| Config      | `.mcp.json` → `"lorem"` entry                 |
+
+### How to set up
+
+See [`HOWTORUN.md`](./HOWTORUN.md) for full install, run, and connect instructions.
+
+### Interactions performed
+
+1. Called `read` with `word_count=5` → returned exactly 5 words.
+2. Called `read` with no argument → returned the default 30 words.
+
+Screenshot: `docs/screenshots/custom-mcp-read-tool-result.png`.
