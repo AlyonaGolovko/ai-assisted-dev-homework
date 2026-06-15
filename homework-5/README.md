@@ -1,4 +1,4 @@
-# 🏦 Homework 1: Banking Transactions API
+# 🔌 Homework 5: Configure MCP Servers (GitHub, Filesystem, Jira or Notion, Custom)
 
 > **Student Name**: Alona Holovko
 > **Date Submitted**: 14.06.2026
