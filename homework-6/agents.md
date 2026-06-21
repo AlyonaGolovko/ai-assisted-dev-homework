@@ -33,7 +33,7 @@ writing JSON message files in `shared/` (see message envelope and layout below).
 | Module system | ESM only (`"type": "module"`); use `import`/`export`, no `require` |
 | Money | `decimal.js` - never binary float / `Number` math on amounts |
 | Rounding | `ROUND_HALF_UP`, 2 decimal places |
-| Currency | ISO 4217 validation via a hardcoded code set (no network, no dep) |
+| Currency | ISO 4217 validation via the `currency-codes` package |
 | UUIDs | built-in `node:crypto` `randomUUID()` |
 | Tests / coverage | `vitest` + `@vitest/coverage-v8`, `json-summary` reporter; gate 80%, aim >= 90% |
 | MCP | `@modelcontextprotocol/sdk` (+ `zod`), stdio transport |
@@ -54,10 +54,10 @@ helpers. Rounding is `ROUND_HALF_UP` to 2 places.
 
 ## 4. Currency rule (ISO 4217)
 
-Currencies are validated against a hardcoded set of ISO 4217 alphabetic codes
-(USD, EUR, GBP, JPY, CHF, CAD, AUD, ...). A currency not in the set causes the
-validator to reject the transaction. No external service or dependency is used
-for this check.
+Currencies are validated against ISO 4217 using the `currency-codes` package:
+`cc.code(currency)` returns `undefined` for an unknown code, which causes the
+validator to reject the transaction. We deliberately keep amount precision as a
+simple <= 2 decimal-place check rather than varying decimals per currency.
 
 ## 5. Message envelope (standard at every stage)
 

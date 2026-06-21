@@ -45,9 +45,10 @@
   `decimal.js` for any compare/arithmetic. Never use `Number`, `parseFloat`, or
   float operators (`+`/`-`/`*`) on money. Rounding is `ROUND_HALF_UP` to 2
   decimal places.
-- Currency: validate against a hardcoded ISO 4217 alphabetic code set (USD, EUR,
-  GBP, JPY, CHF, CAD, AUD, ...). No network call and no external dependency for
-  this check; an unknown code causes the validator to reject.
+- Currency: validate against ISO 4217 using the `currency-codes` package
+  (`cc.code(currency)` is `undefined` for an unknown code -> reject). Amount
+  precision stays a simple <= 2 decimal-place check; decimals are not varied per
+  currency.
 - Audit logging: `agents/lib/logger.js` `audit({ agent, transactionId, outcome,
   detail })` writes one ISO-8601 UTC line per operation (e.g.
   `validated` / `rejected: bad currency` / `flagged: score 65`).
@@ -57,8 +58,8 @@
   account numbers or names.
 - Runtime: Node.js 22, ESM only (`"type": "module"`); `import`/`export`, no
   `require`. UUIDs from `node:crypto` `randomUUID()`.
-- Dependencies: `decimal.js`, `@modelcontextprotocol/sdk`, `zod`; dev:
-  `vitest`, `@vitest/coverage-v8`.
+- Dependencies: `decimal.js`, `currency-codes`, `@modelcontextprotocol/sdk`,
+  `zod`; dev: `vitest`, `@vitest/coverage-v8`.
 - Conventions: small, pure, individually testable functions; named exports; each
   agent exports a pure `process(message)` plus a side-effecting `run()` that does
   file I/O.
@@ -105,10 +106,10 @@ Details: messaging builds and moves message envelopes (see agents.md section 5) 
 
 ```
 Task: Transaction Validator
-Prompt: "Create agents/transaction_validator.js as an ESM module exporting process(message) and run(). process applies the validation rules and returns a message with status validated or rejected (plus reason). run reads shared/input, moves each message through shared/processing, and writes validated messages to shared/output for the fraud detector; rejected ones are reported out. Support a --dry-run flag that validates sample-transactions.json and prints a table without moving files. Use agents/lib/money.js for amount checks and agents/lib/logger.js for audit logging; validate currency against ISO 4217."
+Prompt: "Create agents/transaction_validator.js as an ESM module exporting process(message) and run(). process applies the validation rules and returns a message with status validated or rejected (plus reason). run reads shared/input, moves each message through shared/processing, and writes validated messages to shared/output for the fraud detector; rejected ones are reported out. Support a --dry-run flag that validates sample-transactions.json and prints a table without moving files. Use agents/lib/money.js for amount checks and agents/lib/logger.js for audit logging; validate currency against ISO 4217 using the currency-codes package."
 File to CREATE: agents/transaction_validator.js
 Function to CREATE: process(message) -> message; run({ dryRun }?)
-Details: Reject if any required field is missing, currency is not a valid ISO 4217 code, amount fails ^-?\\d+(\\.\\d{1,2})?$, or amount <= 0 unless transaction_type === "refund". Valid -> status "validated" forwarded to fraud; invalid -> status "rejected" with a reason, reported directly. Amount comparisons go through decimal.js. Audit-log every decision with redacted PII.
+Details: Reject if any required field is missing, currency is not a valid ISO 4217 code (currency-codes cc.code() undefined), amount fails ^-?\\d+(\\.\\d{1,2})?$, or amount <= 0 unless transaction_type === "refund". Valid -> status "validated" forwarded to fraud; invalid -> status "rejected" with a reason, reported directly. Amount comparisons go through decimal.js. Audit-log every decision with redacted PII.
 ```
 
 ### 3. Fraud Detector
