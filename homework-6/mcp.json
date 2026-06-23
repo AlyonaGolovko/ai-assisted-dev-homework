@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "env": {
+        "PATH": "/Users/alyonagolovko/.nvm/versions/node/v22.22.1/bin:${PATH}"
+      }
+    },
+    "pipeline-status": {
+      "command": "node",
+      "args": ["mcp/server.js"],
+      "env": {
+        "PATH": "/Users/alyonagolovko/.nvm/versions/node/v22.22.1/bin:${PATH}"
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "homework-6-banking-pipeline",
+  "version": "1.0.0",
+  "description": "File-based multi-agent banking transaction pipeline (validator -> fraud detector -> reporting agent).",
+  "type": "module",
+  "author": "Alona Holovko",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "pipeline": "node integrator.js",
+    "validate": "node agents/transaction_validator.js --dry-run",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.0",
+    "currency-codes": "^2.2.0",
+    "decimal.js": "^10.4.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.8",
+    "vitest": "^2.1.8"
+  }
+}
