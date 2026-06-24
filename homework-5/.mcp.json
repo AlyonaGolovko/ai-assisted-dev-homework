@@ -1,0 +1,29 @@
+{
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_PAT}"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/alyonagolovko/Alyona/study/ai-assisted-dev-homework/homework-5"
+      ]
+    },
+    "jira": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/mcp"
+    },
+    "lorem": {
+      "command": "/Users/alyonagolovko/Alyona/study/ai-assisted-dev-homework/homework-5/custom-mcp-server/.venv/bin/python",
+      "args": [
+        "/Users/alyonagolovko/Alyona/study/ai-assisted-dev-homework/homework-5/custom-mcp-server/server.py"
+      ]
+    }
+  }
+}
